@@ -13,105 +13,55 @@ df = df.drop(6, errors='ignore')  # Drops the 'total sales' row
 
 
 
-options = [{'label': 'Portugal', 'value': 'PT'},
-           {'label': 'Spain', 'value': 'SP'},
-           {'label': 'France', 'value': 'FR'}]
+options = [{'label': 'Month of July', 'value': 'July'},
+           {'label': 'Month of August', 'value': 'August'},
+           {'label': 'Month of September', 'value': 'September'}]
+
+# The App itself
 
 app = dash.Dash(__name__)
 
-app.layout = html.Div([
+server = app.server
 
-    html.Label('Dropdown'),
+app.layout = html.Div([
+    html.H1('Exercise 3 Data Visualization Example'),
+
+    html.Br(),
+
+    html.Label('Choose a Month:'),
     dcc.Dropdown(
         id='drop',
         options=options,
-        value='PT'
+        value='July'
     ),
 
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Multi-Select Dropdown'),
-    dcc.Dropdown(
-        id='multidrop',
-        options=options,
-        value=['PT', 'FR'],
-        multi=True
-    ),
-
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Text Input'),
-    dcc.Input(
-        id='input',
-        value='PT',
-        type='text'),
-
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Slider'),
-    dcc.Slider(
-        id='slider',
-        min=0,
-        max=9,
-        marks={i: 'Label {}'.format(i) for i in range(1, 6)},
-        value=5,
-        step=1
-    ),
-
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Range Slider'),
-    dcc.RangeSlider(
-        id='rangeslider',
-        marks={i: 'Label {}'.format(i) for i in range(0, 9)},
-        min=0,
-        max=9,
-        value=[0, 1],
-        step=1
-    ),
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Text Area'),
-    dcc.Textarea(
-        id='textarea',
-        placeholder='Enter a value...',
-        value='This is a TextArea component'
-    ),
-
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Date Picker Single'),
-    dcc.DatePickerSingle(
-        id='date-picker-single',
-        date=dt(2019, 6, 12)
-    ),
-
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Radio Items'),
-    dcc.RadioItems(
-        id='radio',
-        options=options,
-        value='PT'
-    ),
-
-    html.Br(),
-    html.Hr(),
-
-    html.Label('Checkboxes'),
-    dcc.Checklist(
-        id='checkbox',
-        options=options,
-        value=['PT', 'FR']
+    dcc.Graph(
+        id='example-graph'
     )
+
 ])
+
+
+@app.callback(
+    Output(component_id='example-graph', component_property='figure'),
+    [Input(component_id='drop', component_property='value')]
+)
+def callback_1(input_value):
+    data_bar = dict(type='bar',
+                    y=df[input_value],
+                    x=df['Product'],
+                    texttemplate='<b>%{y} €</b>',
+                    textposition='outside'
+                    )
+
+    layout_bar = dict(yaxis=dict(range=(0, 1500),
+                                 title='Monetary Units'
+                                 )
+                      )
+
+    return go.Figure(data=data_bar, layout=layout_bar)
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
