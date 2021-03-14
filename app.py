@@ -51,7 +51,7 @@ server = app.server
 
 
 app.layout = html.Div(children=[
-    html.H1(children='My First DashBoard'),
+    html.H1(children='Demand forecast protype'),
 
     html.Div(children='''
         Example of html Container
