@@ -1,7 +1,18 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from datetime import datetime as dt
+from dash.dependencies import Input, Output
+import plotly.graph_objects as go
+import pandas as pd
+import numpy as np
+
+# Dataset Processing
+
+path = 'https://raw.githubusercontent.com/nalpalhao/DV_Practival/master/datasets/Lesson_1/'
+
+df = pd.read_excel(path + 'hw_1_data.xlsx', sheet_name='ex3')
+df = df.drop(6, errors='ignore')  # Drops the 'total sales' row
+
 
 
 options = [{'label': 'Portugal', 'value': 'PT'},
