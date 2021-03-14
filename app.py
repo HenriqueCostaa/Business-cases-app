@@ -8,9 +8,7 @@ import numpy as np
 
 # Dataset Processing
 
-path = 'https://raw.githubusercontent.com/nalpalhao/DV_Practival/master/datasets/Lesson_1/'
-
-df = pd.read_excel(path + 'hw_1_data.xlsx', sheet_name='ex3')
+df_emissions = pd.read_csv('emission_full.csv')
 df = df.drop(6, errors='ignore')  # Drops the 'total sales' row
 
 
