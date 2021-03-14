@@ -17,6 +17,27 @@ options = [{'label': 'Month of July', 'value': 'July'},
            {'label': 'Month of August', 'value': 'August'},
            {'label': 'Month of September', 'value': 'September'}]
 
+
+
+
+@app.callback(
+    Output(component_id='example-graph', component_property='figure'),
+    [Input(component_id='drop', component_property='value')]
+)
+def callback_1(input_value):
+    data_bar = dict(type='bar',
+                    y=df[input_value],
+                    x=df['Product'],
+                    texttemplate='<b>%{y} €</b>',
+                    textposition='outside'
+                    )
+
+    layout_bar = dict(yaxis=dict(range=(0, 1500),
+                                 title='Monetary Units'
+                                 )
+                      )
+
+    return go.Figure(data=data_bar, layout=layout_bar)
 # The App itself
 
 app = dash.Dash(__name__)
@@ -40,26 +61,6 @@ app.layout = html.Div([
     )
 
 ])
-
-
-@app.callback(
-    Output(component_id='example-graph', component_property='figure'),
-    [Input(component_id='drop', component_property='value')]
-)
-def callback_1(input_value):
-    data_bar = dict(type='bar',
-                    y=df[input_value],
-                    x=df['Product'],
-                    texttemplate='<b>%{y} €</b>',
-                    textposition='outside'
-                    )
-
-    layout_bar = dict(yaxis=dict(range=(0, 1500),
-                                 title='Monetary Units'
-                                 )
-                      )
-
-    return go.Figure(data=data_bar, layout=layout_bar)
 
 
 if __name__ == '__main__':
